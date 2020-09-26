@@ -13,24 +13,32 @@ class CreateFavoritesTable extends Migration
      */
     public function up()
     {
-        Schema::create('favorites', function (Blueprint $table) {
-            $table->unsignedInteger('user_id')->comment('ユーザID');
-            $table->unsignedInteger('post_id')->comment('ツイートID');
+      Schema::create('favorites', function (Blueprint $table) {
+              $table->increments('id');
+              $table->unsignedInteger('user_id')->comment('ユーザID');
+              $table->unsignedInteger('post_id')->comment('投稿ID');
 
-            $table->unique(['user_id', 'post_id']);
+              $table->index('id');
+              $table->index('user_id');
+              $table->index('post_id');
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+              $table->unique([
+                  'user_id',
+                  'post_id'
+              ]);
 
-            $table->foreign('post_id')
-                ->references('id')
-                ->on('posts')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-        });
+              $table->foreign('user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+
+              $table->foreign('post_id')
+                  ->references('id')
+                  ->on('posts')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+          });
     }
 
     /**
